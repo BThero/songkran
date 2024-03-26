@@ -1,15 +1,15 @@
-import "./style.css";
-import p5 from "p5";
-import { draw as drawMenu } from "./states/menu";
-import { draw as drawPlaying } from "./states/playing";
-import playButtonUrl from "/play-button.png";
-import waterGunUrl from "/water-gun.png";
-import crosshairUrl from "/crosshair.png";
+import './style.css';
+import p5 from 'p5';
+import { draw as drawMenu } from './states/menu';
+import { draw as drawPlaying } from './states/playing';
+import playButtonUrl from '/play-button.png';
+import waterGunUrl from '/water-gun.png';
+import crosshairUrl from '/crosshair.png';
 
 enum GameState {
-  MENU = "menu",
-  PLAYING = "playing",
-  GAME_OVER = "game over",
+  MENU = 'menu',
+  PLAYING = 'playing',
+  GAME_OVER = 'game over',
 }
 
 const sketch = (p: p5) => {
