@@ -1,5 +1,13 @@
 import p5 from 'p5';
 
+enum NPCState {
+  MOVING,
+  STOPPED,
+  SHOOTING,
+  HAPPY,
+  GONE,
+}
+
 type Props = {
   x: number;
   y: number;
@@ -16,6 +24,7 @@ export class NPC {
   framesToShoot: number;
   framesToHappy: number;
   framesToDisappear: number;
+  state: NPCState;
 
   constructor(props: Props) {
     this.x = props.x;
@@ -26,6 +35,7 @@ export class NPC {
     this.framesToShoot = 60;
     this.framesToHappy = 60;
     this.framesToDisappear = 300;
+    this.state = NPCState.MOVING;
   }
 
   isHit(p: p5): boolean {
@@ -35,44 +45,49 @@ export class NPC {
     );
   }
 
-  isHappy(): boolean {
-    return this.framesToHappy <= 0;
-  }
-
   isGone(): boolean {
-    return this.framesToDisappear <= 0;
+    return this.state === NPCState.GONE;
   }
 
   draw(p: p5, lostCb: () => void) {
-    if (this.isGone()) {
+    if (this.state === NPCState.GONE) {
       return;
     }
 
     p.push();
     p.translate(this.x, this.y);
 
-    let fillColor: string = 'blue';
-
-    if (!this.isHappy()) {
-      if (this.framesToStop > 0) {
-        fillColor = 'blue';
-        this.x += this.direction;
-        this.y = p.constrain(this.y + p.random(-1, 1), 50, p.height - 400);
-        this.framesToStop -= 1;
-      } else if (this.framesToShoot > 0) {
-        fillColor = 'red';
-        this.framesToShoot -= 1;
-      } else {
-        lostCb();
+    if (this.isHit(p) && this.state !== NPCState.HAPPY) {
+      this.framesToHappy -= 1;
+      if (this.framesToHappy <= 0) {
+        this.state = NPCState.HAPPY;
       }
+    }
 
-      if (this.isHit(p)) {
-        fillColor = 'green';
-        this.framesToHappy -= 1;
-      }
-    } else {
+    let fillColor: string = '';
+
+    if (this.state === NPCState.HAPPY) {
       fillColor = 'yellow';
       this.framesToDisappear -= 1;
+      if (this.framesToDisappear <= 0) {
+        this.state = NPCState.GONE;
+      }
+    } else if (this.state === NPCState.MOVING) {
+      fillColor = 'blue';
+      this.x += this.direction;
+      this.y = p.constrain(this.y + p.random(-1, 1), 50, p.height - 400);
+      this.framesToStop -= 1;
+      if (this.framesToStop <= 0) {
+        this.state = NPCState.STOPPED;
+      }
+    } else if (this.state === NPCState.STOPPED) {
+      fillColor = 'red';
+      this.framesToShoot -= 1;
+      if (this.framesToShoot <= 0) {
+        this.state = NPCState.SHOOTING;
+      }
+    } else if (this.state === NPCState.SHOOTING) {
+      lostCb();
     }
 
     p.noStroke();
