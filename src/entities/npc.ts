@@ -13,6 +13,11 @@ type Props = {
   y: number;
   direction: number;
   framesToStop: number;
+  faces: {
+    moving: p5.Image;
+    stopped: p5.Image;
+    happy: p5.Image;
+  };
 };
 
 export class NPC {
@@ -25,6 +30,11 @@ export class NPC {
   framesToHappy: number;
   framesToDisappear: number;
   state: NPCState;
+  faces: {
+    moving: p5.Image;
+    stopped: p5.Image;
+    happy: p5.Image;
+  };
 
   constructor(props: Props) {
     this.x = props.x;
@@ -36,6 +46,7 @@ export class NPC {
     this.framesToHappy = 60;
     this.framesToDisappear = 300;
     this.state = NPCState.MOVING;
+    this.faces = props.faces;
   }
 
   isHit(p: p5): boolean {
@@ -56,6 +67,7 @@ export class NPC {
 
     p.push();
     p.translate(this.x, this.y);
+    p.imageMode(p.CENTER);
 
     if (this.isHit(p) && this.state !== NPCState.HAPPY) {
       this.framesToHappy -= 1;
@@ -64,16 +76,16 @@ export class NPC {
       }
     }
 
-    let fillColor: string = '';
-
     if (this.state === NPCState.HAPPY) {
-      fillColor = 'yellow';
+      p.image(this.faces.happy, 0, 0, this.radius * 2, this.radius * 2);
+
       this.framesToDisappear -= 1;
       if (this.framesToDisappear <= 0) {
         this.state = NPCState.GONE;
       }
     } else if (this.state === NPCState.MOVING) {
-      fillColor = 'blue';
+      p.image(this.faces.moving, 0, 0, this.radius * 2, this.radius * 2);
+
       this.x += this.direction;
       this.y = p.constrain(this.y + p.random(-1, 1), 50, p.height - 400);
       this.framesToStop -= 1;
@@ -81,7 +93,8 @@ export class NPC {
         this.state = NPCState.STOPPED;
       }
     } else if (this.state === NPCState.STOPPED) {
-      fillColor = 'red';
+      p.image(this.faces.stopped, 0, 0, this.radius * 2, this.radius * 2);
+
       this.framesToShoot -= 1;
       if (this.framesToShoot <= 0) {
         this.state = NPCState.SHOOTING;
@@ -91,8 +104,6 @@ export class NPC {
     }
 
     p.noStroke();
-    p.fill(fillColor);
-    p.circle(0, 0, this.radius);
 
     p.stroke('white');
     p.fill('gray');

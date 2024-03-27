@@ -16,7 +16,8 @@ const checkStartGame = (p: p5): boolean => {
 
 export const draw = (p: p5, props: Props) => {
   p.push();
-  p.background(0);
+  p.background(255);
+  p.cursor(p.ARROW);
 
   p.translate(p.width / 2, p.height / 2);
   p.imageMode(p.CENTER);

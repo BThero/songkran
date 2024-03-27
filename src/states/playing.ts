@@ -5,9 +5,14 @@ type Props = {
   onGameLost: () => void;
   waterGunImg: p5.Image;
   crosshairImg: p5.Image;
+  faces: Array<{
+    moving: p5.Image;
+    stopped: p5.Image;
+    happy: p5.Image;
+  }>;
 };
 
-const NPCs: NPC[] = [];
+let NPCs: NPC[] = [];
 let frames: number = 0;
 let spawnRate: number = 180;
 let difficultyFactor: number = 0;
@@ -26,15 +31,23 @@ const addNPC = (npc: NPC) => {
   }
 };
 
+export const reset = () => {
+  NPCs = [];
+  frames = 0;
+  spawnRate = 180;
+  difficultyFactor = 0;
+};
+
 export const draw = (p: p5, props: Props) => {
   p.push();
-  p.background(0);
+  p.background(255);
   p.cursor('none');
 
   frames += 1;
 
   if (frames >= spawnRate - difficultyFactor * 5) {
     const fromLeft = p.random() > 0.5;
+    const faceIndex = Math.floor(p.random() * props.faces.length);
     addNPC(
       new NPC({
         x: fromLeft ? 0 : p.width,
@@ -44,6 +57,11 @@ export const draw = (p: p5, props: Props) => {
           (fromLeft ? 1 : -1) *
           p.random(1, 3) *
           p.map(difficultyFactor, 0, 48, 1, 2),
+        faces: {
+          moving: props.faces[faceIndex].moving,
+          stopped: props.faces[faceIndex].stopped,
+          happy: props.faces[faceIndex].happy,
+        },
       }),
     );
 
