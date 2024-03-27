@@ -5,8 +5,6 @@ type Props = {
   y: number;
   direction: number;
   framesToStop: number;
-  framesToShoot: number;
-  framesToHappy: number;
 };
 
 export class NPC {
@@ -17,15 +15,17 @@ export class NPC {
   framesToStop: number;
   framesToShoot: number;
   framesToHappy: number;
+  framesToDisappear: number;
 
   constructor(props: Props) {
     this.x = props.x;
     this.y = props.y;
     this.direction = props.direction;
-    this.framesToStop = props.framesToStop;
-    this.framesToShoot = props.framesToShoot;
-    this.framesToHappy = props.framesToHappy;
     this.radius = 50;
+    this.framesToStop = props.framesToStop;
+    this.framesToShoot = 60;
+    this.framesToHappy = 60;
+    this.framesToDisappear = 300;
   }
 
   isHit(p: p5): boolean {
@@ -35,13 +35,25 @@ export class NPC {
     );
   }
 
+  isHappy(): boolean {
+    return this.framesToHappy <= 0;
+  }
+
+  isGone(): boolean {
+    return this.framesToDisappear <= 0;
+  }
+
   draw(p: p5, lostCb: () => void) {
+    if (this.isGone()) {
+      return;
+    }
+
     p.push();
     p.translate(this.x, this.y);
 
     let fillColor: string = 'blue';
 
-    if (this.framesToHappy > 0) {
+    if (!this.isHappy()) {
       if (this.framesToStop > 0) {
         fillColor = 'blue';
         this.x += this.direction;
@@ -60,6 +72,7 @@ export class NPC {
       }
     } else {
       fillColor = 'yellow';
+      this.framesToDisappear -= 1;
     }
 
     p.noStroke();
