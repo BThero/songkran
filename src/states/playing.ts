@@ -9,7 +9,8 @@ type Props = {
 
 const NPCs: NPC[] = [];
 let frames: number = 0;
-let spawnRate: number = 240;
+let spawnRate: number = 180;
+let difficultyFactor: number = 0;
 
 export const draw = (p: p5, props: Props) => {
   p.push();
@@ -17,18 +18,23 @@ export const draw = (p: p5, props: Props) => {
 
   frames += 1;
 
-  if (frames === spawnRate) {
+  if (frames >= spawnRate - difficultyFactor * 5) {
+    const fromLeft = p.random() > 0.5;
+
     const npc = new NPC({
-      x: 0,
-      y: p.random(10, p.height - 10),
-      framesToStop: spawnRate,
+      x: fromLeft ? 0 : p.width,
+      y: p.random(50, p.height - 400),
+      framesToStop: p.map(difficultyFactor, 0, 48, 300, 180),
       framesToShoot: 60,
       framesToHappy: 60,
-      speed: p.random(1, 5),
+      direction:
+        (fromLeft ? 1 : -1) *
+        p.random(1, 3) *
+        p.map(difficultyFactor, 0, 48, 1, 2),
     });
     NPCs.push(npc);
-    spawnRate -= 5;
     frames = 0;
+    difficultyFactor += 1;
   }
 
   for (const NPC of NPCs) {
