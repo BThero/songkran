@@ -7,7 +7,7 @@ import { draw as drawPlaying, reset as resetGame } from './states/playing';
 import { draw as drawGameOver } from './states/game-over';
 
 import playButtonUrl from '/play-button.png';
-import waterGunUrl from '/water-gun-small.png';
+import waterGunUrl from '/water-gun.png';
 import startBannerUrl from '/start-banner.png';
 
 import jackieHappyUrl from '/jackie-happy.png';
@@ -104,8 +104,7 @@ const sketch = (p: p5) => {
   };
 
   p.setup = () => {
-    p.createCanvas(1280, 720);
-    // p.createCanvas(screen.width, screen.height);
+    p.createCanvas(1152, 648);
     p.background(0);
   };
 

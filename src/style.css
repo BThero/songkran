@@ -16,8 +16,8 @@ body {
 }
 
 main {
-  width: 1280px;
-  height: 720px;
+  width: 1152px;
+  height: 648px;
   border: 2px solid white;
   border-radius: 16px;
   overflow: hidden;
