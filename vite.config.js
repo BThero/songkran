@@ -4,7 +4,4 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   base: '/songkran/',
   assetsInclude: ['**/*.png', '**/*.mp3'],
-  build: {
-    target: 'esnext',
-  },
 });
