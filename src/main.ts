@@ -1,12 +1,14 @@
 import './style.css';
 import p5 from 'p5';
+(window as any).p5 = p5;
+await import('p5/lib/addons/p5.sound');
+
 import { draw as drawMenu } from './states/menu';
 import { draw as drawPlaying, reset as resetGame } from './states/playing';
 import { draw as drawGameOver } from './states/game-over';
 
 import playButtonUrl from '/play-button.png';
 import waterGunUrl from '/water-gun.png';
-import crosshairUrl from '/crosshair.png';
 import startBannerUrl from '/start-banner.png';
 
 import jackieHappyUrl from '/jackie-happy.png';
@@ -36,6 +38,8 @@ import gelStoppedUrl from '/gel-stopped.png';
 import playBackgroundUrl from '/play-background.png';
 import gameOverBackgroundUrl from '/game-over-background.png';
 
+import waterGunShootUrl from '/water-gun-shoot.mp3';
+
 enum GameState {
   MENU = 'menu',
   PLAYING = 'playing',
@@ -46,7 +50,6 @@ const sketch = (p: p5) => {
   let currentState: GameState = GameState.MENU;
   let playButtonImg: p5.Image;
   let waterGunImg: p5.Image;
-  let crosshairImg: p5.Image;
   let startBannerImg: p5.Image;
   let faces: Array<{
     moving: p5.Image;
@@ -55,12 +58,12 @@ const sketch = (p: p5) => {
   }>;
   let playBackgroundImg: p5.Image;
   let gameOverBackgroundImg: p5.Image;
+  let waterGunShootSound: p5.SoundFile;
 
   p.preload = () => {
     startBannerImg = p.loadImage(startBannerUrl);
     playButtonImg = p.loadImage(playButtonUrl);
     waterGunImg = p.loadImage(waterGunUrl);
-    crosshairImg = p.loadImage(crosshairUrl);
     playBackgroundImg = p.loadImage(playBackgroundUrl);
     faces = [
       {
@@ -95,6 +98,7 @@ const sketch = (p: p5) => {
       },
     ];
     gameOverBackgroundImg = p.loadImage(gameOverBackgroundUrl);
+    waterGunShootSound = p.loadSound(waterGunShootUrl);
   };
 
   p.setup = () => {
@@ -120,7 +124,6 @@ const sketch = (p: p5) => {
           currentState = GameState.GAME_OVER;
         },
         waterGunImg,
-        crosshairImg,
         faces,
         backgroundImg: playBackgroundImg,
       });
@@ -134,6 +137,14 @@ const sketch = (p: p5) => {
         backgroundImg: gameOverBackgroundImg,
       });
     }
+  };
+
+  p.mousePressed = () => {
+    waterGunShootSound.loop();
+  };
+
+  p.mouseReleased = () => {
+    waterGunShootSound.pause();
   };
 };
 

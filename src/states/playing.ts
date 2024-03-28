@@ -1,10 +1,10 @@
 import p5 from 'p5';
 import { NPC } from '../entities/npc';
+import { Emitter } from '../entities/emitter';
 
 type Props = {
   onGameLost: () => void;
   waterGunImg: p5.Image;
-  crosshairImg: p5.Image;
   backgroundImg: p5.Image;
   faces: Array<{
     moving: p5.Image;
@@ -17,6 +17,7 @@ let NPCs: NPC[] = [];
 let frames: number = 0;
 let spawnRate: number = 180;
 let difficultyFactor: number = 0;
+let emitter: Emitter;
 
 const addNPC = (npc: NPC) => {
   let i = 0;
@@ -51,6 +52,7 @@ export const draw = (p: p5, props: Props) => {
     const faceIndex = Math.floor(p.random() * props.faces.length);
     addNPC(
       new NPC({
+        p,
         x: fromLeft ? 0 : p.width,
         y: p.random(50, p.height - 400),
         framesToStop: p.map(difficultyFactor, 0, 48, 300, 180),
@@ -74,10 +76,25 @@ export const draw = (p: p5, props: Props) => {
     NPC.draw(p, props.onGameLost);
   }
 
+  if (!p.mouseIsPressed || !emitter) {
+    emitter = new Emitter(p, p.mouseX, p.mouseY);
+  } else {
+    p.push();
+    emitter.updatePosition(p.mouseX, p.mouseY);
+    emitter.emit(p, 4);
+    emitter.show(p);
+    emitter.update(p);
+    p.pop();
+  }
+
   p.imageMode(p.CENTER);
   p.image(props.waterGunImg, p.mouseX, p.height - 150);
 
-  p.image(props.crosshairImg, p.mouseX, p.mouseY, 50, 50);
+  p.ellipseMode(p.CENTER);
+  p.strokeWeight(3);
+  p.stroke(255);
+  p.fill(101, 201, 255);
+  p.circle(p.mouseX, p.mouseY, 25);
 
   p.pop();
 };
