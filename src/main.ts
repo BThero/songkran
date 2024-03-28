@@ -1,7 +1,6 @@
 import './style.css';
 import p5 from 'p5';
-(window as any).p5 = p5;
-await import('p5/lib/addons/p5.sound');
+import * as Tone from 'tone';
 
 import { draw as drawMenu } from './states/menu';
 import { draw as drawPlaying, reset as resetGame } from './states/playing';
@@ -58,7 +57,7 @@ const sketch = (p: p5) => {
   }>;
   let playBackgroundImg: p5.Image;
   let gameOverBackgroundImg: p5.Image;
-  let waterGunShootSound: p5.SoundFile;
+  let player: Tone.Player;
 
   p.preload = () => {
     startBannerImg = p.loadImage(startBannerUrl);
@@ -98,7 +97,10 @@ const sketch = (p: p5) => {
       },
     ];
     gameOverBackgroundImg = p.loadImage(gameOverBackgroundUrl);
-    waterGunShootSound = p.loadSound(waterGunShootUrl);
+    player = new Tone.Player({
+      url: waterGunShootUrl,
+      loop: true,
+    }).toDestination();
   };
 
   p.setup = () => {
@@ -140,11 +142,11 @@ const sketch = (p: p5) => {
   };
 
   p.mousePressed = () => {
-    waterGunShootSound.loop();
+    player.start();
   };
 
   p.mouseReleased = () => {
-    waterGunShootSound.pause();
+    player.stop();
   };
 };
 
