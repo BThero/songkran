@@ -54,7 +54,7 @@ export const draw = (p: p5, props: Props) => {
       new NPC({
         p,
         x: fromLeft ? 0 : p.width,
-        y: p.random(50, p.height - 400),
+        y: p.random(50, p.height - 300),
         framesToStop: p.map(difficultyFactor, 0, 48, 300, 180),
         direction:
           (fromLeft ? 1 : -1) *
