@@ -1,5 +1,8 @@
 import './style.css';
 import p5 from 'p5';
+(window as any).p5 = p5;
+await import('p5/lib/addons/p5.sound');
+
 import { draw as drawMenu } from './states/menu';
 import { draw as drawPlaying, reset as resetGame } from './states/playing';
 import { draw as drawGameOver } from './states/game-over';
@@ -36,6 +39,8 @@ import gelStoppedUrl from '/gel-stopped.png';
 import playBackgroundUrl from '/play-background.png';
 import gameOverBackgroundUrl from '/game-over-background.png';
 
+import waterGunShootUrl from '/water-gun-shoot.mp3';
+
 enum GameState {
   MENU = 'menu',
   PLAYING = 'playing',
@@ -55,6 +60,7 @@ const sketch = (p: p5) => {
   }>;
   let playBackgroundImg: p5.Image;
   let gameOverBackgroundImg: p5.Image;
+  let waterGunShootSound: p5.SoundFile;
 
   p.preload = () => {
     startBannerImg = p.loadImage(startBannerUrl);
@@ -95,6 +101,7 @@ const sketch = (p: p5) => {
       },
     ];
     gameOverBackgroundImg = p.loadImage(gameOverBackgroundUrl);
+    waterGunShootSound = p.loadSound(waterGunShootUrl);
   };
 
   p.setup = () => {
@@ -108,7 +115,7 @@ const sketch = (p: p5) => {
     if (currentState === GameState.MENU) {
       drawMenu(p, {
         onGameStart: () => {
-          resetGame(p);
+          resetGame();
           currentState = GameState.PLAYING;
         },
         startBannerImg,
@@ -127,13 +134,21 @@ const sketch = (p: p5) => {
     } else if (currentState === GameState.GAME_OVER) {
       drawGameOver(p, {
         onGameRestart: () => {
-          resetGame(p);
+          resetGame();
           currentState = GameState.PLAYING;
         },
         restartButtonImg: playButtonImg,
         backgroundImg: gameOverBackgroundImg,
       });
     }
+  };
+
+  p.mousePressed = () => {
+    waterGunShootSound.loop();
+  };
+
+  p.mouseReleased = () => {
+    waterGunShootSound.pause();
   };
 };
 

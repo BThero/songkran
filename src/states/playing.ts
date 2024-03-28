@@ -34,12 +34,11 @@ const addNPC = (npc: NPC) => {
   }
 };
 
-export const reset = (p: p5) => {
+export const reset = () => {
   NPCs = [];
   frames = 0;
   spawnRate = 180;
   difficultyFactor = 0;
-  emitter = new Emitter(p, 0, 0);
 };
 
 export const draw = (p: p5, props: Props) => {
@@ -78,14 +77,16 @@ export const draw = (p: p5, props: Props) => {
     NPC.draw(p, props.onGameLost);
   }
 
-  p.push();
-  emitter.updatePosition(p.mouseX, p.mouseY);
-  emitter.emit(p, 4);
-  if (p.mouseIsPressed) {
+  if (!p.mouseIsPressed || !emitter) {
+    emitter = new Emitter(p, p.mouseX, p.mouseY);
+  } else {
+    p.push();
+    emitter.updatePosition(p.mouseX, p.mouseY);
+    emitter.emit(p, 4);
     emitter.show(p);
+    emitter.update(p);
+    p.pop();
   }
-  emitter.update(p);
-  p.pop();
 
   p.imageMode(p.CENTER);
   p.image(props.waterGunImg, p.mouseX, p.height - 150);
