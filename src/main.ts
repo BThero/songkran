@@ -33,6 +33,7 @@ import gelHappyUrl from '/gel-happy.png';
 import gelMovingUrl from '/gel-moving.png';
 import gelStoppedUrl from '/gel-stopped.png';
 
+import playBackgroundUrl from '/play-background.png';
 import gameOverBackgroundUrl from '/game-over-background.png';
 
 enum GameState {
@@ -52,6 +53,7 @@ const sketch = (p: p5) => {
     stopped: p5.Image;
     happy: p5.Image;
   }>;
+  let playBackgroundImg:p5.Image;
   let gameOverBackgroundImg: p5.Image;
 
   p.preload = () => {
@@ -59,6 +61,7 @@ const sketch = (p: p5) => {
     playButtonImg = p.loadImage(playButtonUrl);
     waterGunImg = p.loadImage(waterGunUrl);
     crosshairImg = p.loadImage(crosshairUrl);
+    playBackgroundImg = p.loadImage(playBackgroundUrl);
     faces = [
       {
         moving: p.loadImage(jackieMovingUrl),
@@ -120,6 +123,7 @@ const sketch = (p: p5) => {
         waterGunImg,
         crosshairImg,
         faces,
+        backgroundImg: playBackgroundImg,
       });
     } else if (currentState === GameState.GAME_OVER) {
       drawGameOver(p, {

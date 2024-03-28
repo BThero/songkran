@@ -5,6 +5,7 @@ type Props = {
   onGameLost: () => void;
   waterGunImg: p5.Image;
   crosshairImg: p5.Image;
+  backgroundImg: p5.Image;
   faces: Array<{
     moving: p5.Image;
     stopped: p5.Image;
@@ -40,7 +41,7 @@ export const reset = () => {
 
 export const draw = (p: p5, props: Props) => {
   p.push();
-  p.background(255);
+  p.image(props.backgroundImg, 0, 0, p.width, p.height);
   p.cursor('none');
 
   frames += 1;
