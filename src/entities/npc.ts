@@ -50,10 +50,32 @@ export class NPC {
   }
 
   isHit(p: p5): boolean {
-    return (
+    if (
       p.mouseIsPressed &&
       p.dist(p.mouseX, p.mouseY, this.x, this.y) < this.radius
-    );
+    ) {
+      this.displayBubbles(p, p.mouseX - this.x, p.mouseY - this.y);
+      return true;
+    }
+    return false;
+  }
+
+  displayBubbles(p: p5, centerX: number, centerY: number) {
+    p.push();
+    p.translate(centerX, centerY);
+    for (let i = 0; i < 10; i++) {
+      let offsetX = p.random(-this.radius, this.radius);
+      let offsetY = p.random(-this.radius, this.radius);
+      let bubbleX = offsetX;
+      let bubbleY = offsetY;
+      let bubbleSize = p.random(5, 15);
+
+      p.fill(0, 0, 255, 100); // Blue color with transparency
+      p.noStroke();
+      p.ellipse(bubbleX, bubbleY, bubbleSize);
+      console.log(bubbleX, bubbleY, centerX, centerY);
+    }
+    p.pop();
   }
 
   isGone(): boolean {
@@ -68,13 +90,6 @@ export class NPC {
     p.push();
     p.translate(this.x, this.y);
     p.imageMode(p.CENTER);
-
-    if (this.isHit(p) && this.state !== NPCState.HAPPY) {
-      this.framesToHappy -= 1;
-      if (this.framesToHappy <= 0) {
-        this.state = NPCState.HAPPY;
-      }
-    }
 
     if (this.state === NPCState.HAPPY) {
       p.image(this.faces.happy, 0, 0, this.radius * 2, this.radius * 2);
@@ -101,6 +116,13 @@ export class NPC {
       }
     } else if (this.state === NPCState.SHOOTING) {
       lostCb();
+    }
+
+    if (this.isHit(p) && this.state !== NPCState.HAPPY) {
+      this.framesToHappy -= 1;
+      if (this.framesToHappy <= 0) {
+        this.state = NPCState.HAPPY;
+      }
     }
 
     p.noStroke();

@@ -7,6 +7,7 @@ import { draw as drawGameOver } from './states/game-over';
 import playButtonUrl from '/play-button.png';
 import waterGunUrl from '/water-gun.png';
 import crosshairUrl from '/crosshair.png';
+import startBannerUrl from '/start-banner.png';
 
 import jackieHappyUrl from '/jackie-happy.png';
 import jackieMovingUrl from '/jackie-moving.png';
@@ -32,6 +33,7 @@ import gelHappyUrl from '/gel-happy.png';
 import gelMovingUrl from '/gel-moving.png';
 import gelStoppedUrl from '/gel-stopped.png';
 
+import playBackgroundUrl from '/play-background.png';
 import gameOverBackgroundUrl from '/game-over-background.png';
 
 enum GameState {
@@ -45,17 +47,21 @@ const sketch = (p: p5) => {
   let playButtonImg: p5.Image;
   let waterGunImg: p5.Image;
   let crosshairImg: p5.Image;
+  let startBannerImg: p5.Image;
   let faces: Array<{
     moving: p5.Image;
     stopped: p5.Image;
     happy: p5.Image;
   }>;
+  let playBackgroundImg: p5.Image;
   let gameOverBackgroundImg: p5.Image;
 
   p.preload = () => {
+    startBannerImg = p.loadImage(startBannerUrl);
     playButtonImg = p.loadImage(playButtonUrl);
     waterGunImg = p.loadImage(waterGunUrl);
     crosshairImg = p.loadImage(crosshairUrl);
+    playBackgroundImg = p.loadImage(playBackgroundUrl);
     faces = [
       {
         moving: p.loadImage(jackieMovingUrl),
@@ -105,6 +111,7 @@ const sketch = (p: p5) => {
           resetGame();
           currentState = GameState.PLAYING;
         },
+        startBannerImg,
         playButtonImg,
       });
     } else if (currentState === GameState.PLAYING) {
@@ -115,6 +122,7 @@ const sketch = (p: p5) => {
         waterGunImg,
         crosshairImg,
         faces,
+        backgroundImg: playBackgroundImg,
       });
     } else if (currentState === GameState.GAME_OVER) {
       drawGameOver(p, {
