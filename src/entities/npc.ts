@@ -1,5 +1,4 @@
 import p5 from 'p5';
-import { Emitter } from './emitter';
 
 enum NPCState {
   MOVING,
@@ -37,7 +36,6 @@ export class NPC {
     stopped: p5.Image;
     happy: p5.Image;
   };
-  emitter: Emitter;
 
   constructor(props: Props) {
     this.x = props.x;
@@ -50,7 +48,6 @@ export class NPC {
     this.framesToDisappear = 300;
     this.state = NPCState.MOVING;
     this.faces = props.faces;
-    this.emitter = new Emitter(props.p, 0, 0);
   }
 
   isHit(p: p5): boolean {
@@ -58,20 +55,9 @@ export class NPC {
       p.mouseIsPressed &&
       p.dist(p.mouseX, p.mouseY, this.x, this.y) < this.radius
     ) {
-      this.displayBubbles(p, p.mouseX - this.x, p.mouseY - this.y);
       return true;
     }
     return false;
-  }
-
-  displayBubbles(p: p5, centerX: number, centerY: number) {
-    p.push();
-    p.translate(centerX, centerY);
-    this.emitter.updatePosition(centerX, centerY);
-    this.emitter.emit(p, 4);
-    this.emitter.show(p);
-    this.emitter.update(p);
-    p.pop();
   }
 
   isGone(): boolean {

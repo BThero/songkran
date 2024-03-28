@@ -1,5 +1,6 @@
 import p5 from 'p5';
 import { NPC } from '../entities/npc';
+import { Emitter } from '../entities/emitter';
 
 type Props = {
   onGameLost: () => void;
@@ -17,6 +18,7 @@ let NPCs: NPC[] = [];
 let frames: number = 0;
 let spawnRate: number = 180;
 let difficultyFactor: number = 0;
+let emitter: Emitter;
 
 const addNPC = (npc: NPC) => {
   let i = 0;
@@ -32,11 +34,12 @@ const addNPC = (npc: NPC) => {
   }
 };
 
-export const reset = () => {
+export const reset = (p: p5) => {
   NPCs = [];
   frames = 0;
   spawnRate = 180;
   difficultyFactor = 0;
+  emitter = new Emitter(p, 0, 0);
 };
 
 export const draw = (p: p5, props: Props) => {
@@ -74,6 +77,15 @@ export const draw = (p: p5, props: Props) => {
   for (const NPC of NPCs) {
     NPC.draw(p, props.onGameLost);
   }
+
+  p.push();
+  emitter.updatePosition(p.mouseX, p.mouseY);
+  emitter.emit(p, 4);
+  if (p.mouseIsPressed) {
+    emitter.show(p);
+  }
+  emitter.update(p);
+  p.pop();
 
   p.imageMode(p.CENTER);
   p.image(props.waterGunImg, p.mouseX, p.height - 150);

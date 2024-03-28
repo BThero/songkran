@@ -108,7 +108,7 @@ const sketch = (p: p5) => {
     if (currentState === GameState.MENU) {
       drawMenu(p, {
         onGameStart: () => {
-          resetGame();
+          resetGame(p);
           currentState = GameState.PLAYING;
         },
         startBannerImg,
@@ -127,7 +127,7 @@ const sketch = (p: p5) => {
     } else if (currentState === GameState.GAME_OVER) {
       drawGameOver(p, {
         onGameRestart: () => {
-          resetGame();
+          resetGame(p);
           currentState = GameState.PLAYING;
         },
         restartButtonImg: playButtonImg,
