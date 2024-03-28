@@ -5,7 +5,6 @@ import { Emitter } from '../entities/emitter';
 type Props = {
   onGameLost: () => void;
   waterGunImg: p5.Image;
-  crosshairImg: p5.Image;
   backgroundImg: p5.Image;
   faces: Array<{
     moving: p5.Image;
@@ -91,7 +90,12 @@ export const draw = (p: p5, props: Props) => {
   p.imageMode(p.CENTER);
   p.image(props.waterGunImg, p.mouseX, p.height - 150);
 
-  p.image(props.crosshairImg, p.mouseX, p.mouseY, 50, 50);
+  p.ellipseMode(p.CENTER);
+  p.strokeWeight(3);
+  p.stroke(255);
+  p.fill(101, 201, 255);
+  p.circle(p.mouseX, p.mouseY, 25);
+  // p.image(props.crosshairImg, p.mouseX, p.mouseY, 50, 50);
 
   p.pop();
 };

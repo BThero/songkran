@@ -9,7 +9,6 @@ import { draw as drawGameOver } from './states/game-over';
 
 import playButtonUrl from '/play-button.png';
 import waterGunUrl from '/water-gun.png';
-import crosshairUrl from '/crosshair.png';
 import startBannerUrl from '/start-banner.png';
 
 import jackieHappyUrl from '/jackie-happy.png';
@@ -51,7 +50,6 @@ const sketch = (p: p5) => {
   let currentState: GameState = GameState.MENU;
   let playButtonImg: p5.Image;
   let waterGunImg: p5.Image;
-  let crosshairImg: p5.Image;
   let startBannerImg: p5.Image;
   let faces: Array<{
     moving: p5.Image;
@@ -66,7 +64,6 @@ const sketch = (p: p5) => {
     startBannerImg = p.loadImage(startBannerUrl);
     playButtonImg = p.loadImage(playButtonUrl);
     waterGunImg = p.loadImage(waterGunUrl);
-    crosshairImg = p.loadImage(crosshairUrl);
     playBackgroundImg = p.loadImage(playBackgroundUrl);
     faces = [
       {
@@ -127,7 +124,6 @@ const sketch = (p: p5) => {
           currentState = GameState.GAME_OVER;
         },
         waterGunImg,
-        crosshairImg,
         faces,
         backgroundImg: playBackgroundImg,
       });
