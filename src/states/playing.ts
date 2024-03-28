@@ -51,6 +51,7 @@ export const draw = (p: p5, props: Props) => {
     const faceIndex = Math.floor(p.random() * props.faces.length);
     addNPC(
       new NPC({
+        p,
         x: fromLeft ? 0 : p.width,
         y: p.random(50, p.height - 400),
         framesToStop: p.map(difficultyFactor, 0, 48, 300, 180),

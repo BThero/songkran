@@ -1,4 +1,5 @@
 import p5 from 'p5';
+import { Emitter } from './emitter';
 
 enum NPCState {
   MOVING,
@@ -9,6 +10,7 @@ enum NPCState {
 }
 
 type Props = {
+  p: p5;
   x: number;
   y: number;
   direction: number;
@@ -35,6 +37,7 @@ export class NPC {
     stopped: p5.Image;
     happy: p5.Image;
   };
+  emitter: Emitter;
 
   constructor(props: Props) {
     this.x = props.x;
@@ -47,6 +50,7 @@ export class NPC {
     this.framesToDisappear = 300;
     this.state = NPCState.MOVING;
     this.faces = props.faces;
+    this.emitter = new Emitter(props.p, 0, 0);
   }
 
   isHit(p: p5): boolean {
@@ -63,18 +67,10 @@ export class NPC {
   displayBubbles(p: p5, centerX: number, centerY: number) {
     p.push();
     p.translate(centerX, centerY);
-    for (let i = 0; i < 10; i++) {
-      let offsetX = p.random(-this.radius, this.radius);
-      let offsetY = p.random(-this.radius, this.radius);
-      let bubbleX = offsetX;
-      let bubbleY = offsetY;
-      let bubbleSize = p.random(5, 15);
-
-      p.fill(0, 0, 255, 100); // Blue color with transparency
-      p.noStroke();
-      p.ellipse(bubbleX, bubbleY, bubbleSize);
-      console.log(bubbleX, bubbleY, centerX, centerY);
-    }
+    this.emitter.updatePosition(centerX, centerY);
+    this.emitter.emit(p, 4);
+    this.emitter.show(p);
+    this.emitter.update(p);
     p.pop();
   }
 
