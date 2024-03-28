@@ -95,7 +95,6 @@ export const draw = (p: p5, props: Props) => {
   p.stroke(255);
   p.fill(101, 201, 255);
   p.circle(p.mouseX, p.mouseY, 25);
-  // p.image(props.crosshairImg, p.mouseX, p.mouseY, 50, 50);
 
   p.pop();
 };
