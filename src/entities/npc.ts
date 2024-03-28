@@ -9,6 +9,7 @@ enum NPCState {
 }
 
 type Props = {
+  p: p5;
   x: number;
   y: number;
   direction: number;
@@ -54,28 +55,9 @@ export class NPC {
       p.mouseIsPressed &&
       p.dist(p.mouseX, p.mouseY, this.x, this.y) < this.radius
     ) {
-      this.displayBubbles(p, p.mouseX - this.x, p.mouseY - this.y);
       return true;
     }
     return false;
-  }
-
-  displayBubbles(p: p5, centerX: number, centerY: number) {
-    p.push();
-    p.translate(centerX, centerY);
-    for (let i = 0; i < 10; i++) {
-      let offsetX = p.random(-this.radius, this.radius);
-      let offsetY = p.random(-this.radius, this.radius);
-      let bubbleX = offsetX;
-      let bubbleY = offsetY;
-      let bubbleSize = p.random(5, 15);
-
-      p.fill(0, 0, 255, 100); // Blue color with transparency
-      p.noStroke();
-      p.ellipse(bubbleX, bubbleY, bubbleSize);
-      console.log(bubbleX, bubbleY, centerX, centerY);
-    }
-    p.pop();
   }
 
   isGone(): boolean {
