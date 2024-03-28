@@ -84,7 +84,7 @@ export class NPC {
       p.image(this.faces.moving, 0, 0, this.radius * 2, this.radius * 2);
 
       this.x += this.direction;
-      this.y = p.constrain(this.y + p.random(-1, 1), 50, p.height - 400);
+      this.y = p.constrain(this.y + p.random(-1, 1), 50, p.height - 300);
       this.framesToStop -= 1;
       if (this.framesToStop <= 0) {
         this.state = NPCState.STOPPED;
