@@ -53,7 +53,7 @@ const sketch = (p: p5) => {
     stopped: p5.Image;
     happy: p5.Image;
   }>;
-  let playBackgroundImg:p5.Image;
+  let playBackgroundImg: p5.Image;
   let gameOverBackgroundImg: p5.Image;
 
   p.preload = () => {
@@ -100,7 +100,6 @@ const sketch = (p: p5) => {
   p.setup = () => {
     p.createCanvas(screen.width, screen.height);
     p.background(0);
-  
   };
 
   p.draw = () => {

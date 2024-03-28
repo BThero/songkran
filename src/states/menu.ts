@@ -24,7 +24,6 @@ export const draw = (p: p5, props: Props) => {
   p.imageMode(p.CENTER);
   p.image(props.startBannerImg, 0, 0, p.width, p.height);
   p.image(props.playButtonImg, 0, 0, 100, 100);
- 
 
   if (checkStartGame(p)) {
     props.onGameStart();
